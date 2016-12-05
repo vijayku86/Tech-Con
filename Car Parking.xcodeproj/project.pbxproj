@@ -1,0 +1,479 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A5EE60901DE2DA9400352F6D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE608F1DE2DA9400352F6D /* main.m */; };
+		A5EE60931DE2DA9400352F6D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60921DE2DA9400352F6D /* AppDelegate.m */; };
+		A5EE60961DE2DA9400352F6D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60951DE2DA9400352F6D /* ViewController.m */; };
+		A5EE60991DE2DA9400352F6D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5EE60971DE2DA9400352F6D /* Main.storyboard */; };
+		A5EE609B1DE2DA9400352F6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5EE609A1DE2DA9400352F6D /* Assets.xcassets */; };
+		A5EE609E1DE2DA9400352F6D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5EE609C1DE2DA9400352F6D /* LaunchScreen.storyboard */; };
+		A5EE60A91DE2F5AA00352F6D /* ParkingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60A81DE2F5AA00352F6D /* ParkingCell.m */; };
+		A5EE60B11DE3145300352F6D /* ParkingLayoutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60B01DE3145300352F6D /* ParkingLayoutVC.m */; };
+		A5EE60B51DE42AC500352F6D /* ParkingCellLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60B41DE42AC500352F6D /* ParkingCellLayout.m */; };
+		EBC1094657489648E2B5E5F7 /* libPods-Car Parking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1EEB292680E27369DF1AE3 /* libPods-Car Parking.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0A1EEB292680E27369DF1AE3 /* libPods-Car Parking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Car Parking.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7266D83F8A126DF397B268EA /* Pods-Car Parking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Car Parking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Car Parking/Pods-Car Parking.debug.xcconfig"; sourceTree = "<group>"; };
+		A5EE608B1DE2DA9400352F6D /* Car Parking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Car Parking.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5EE608F1DE2DA9400352F6D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A5EE60911DE2DA9400352F6D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A5EE60921DE2DA9400352F6D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A5EE60941DE2DA9400352F6D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = ../../ViewController.h; sourceTree = "<group>"; };
+		A5EE60951DE2DA9400352F6D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = ../../ViewController.m; sourceTree = "<group>"; };
+		A5EE60981DE2DA9400352F6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A5EE609A1DE2DA9400352F6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A5EE609D1DE2DA9400352F6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A5EE609F1DE2DA9400352F6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5EE60A71DE2F5AA00352F6D /* ParkingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParkingCell.h; sourceTree = "<group>"; };
+		A5EE60A81DE2F5AA00352F6D /* ParkingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParkingCell.m; sourceTree = "<group>"; };
+		A5EE60AF1DE3145300352F6D /* ParkingLayoutVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParkingLayoutVC.h; sourceTree = "<group>"; };
+		A5EE60B01DE3145300352F6D /* ParkingLayoutVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParkingLayoutVC.m; sourceTree = "<group>"; };
+		A5EE60B31DE42AC500352F6D /* ParkingCellLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParkingCellLayout.h; sourceTree = "<group>"; };
+		A5EE60B41DE42AC500352F6D /* ParkingCellLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParkingCellLayout.m; sourceTree = "<group>"; };
+		D7C5C1FD410A6DED11D0A03B /* Pods-Car Parking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Car Parking.release.xcconfig"; path = "Pods/Target Support Files/Pods-Car Parking/Pods-Car Parking.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A5EE60881DE2DA9400352F6D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBC1094657489648E2B5E5F7 /* libPods-Car Parking.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		016599A5AEDAE2CF6C9652F4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7266D83F8A126DF397B268EA /* Pods-Car Parking.debug.xcconfig */,
+				D7C5C1FD410A6DED11D0A03B /* Pods-Car Parking.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		4F8F402070A5C1C87D0518D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0A1EEB292680E27369DF1AE3 /* libPods-Car Parking.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A5EE60821DE2DA9400352F6D = {
+			isa = PBXGroup;
+			children = (
+				A5EE608D1DE2DA9400352F6D /* Car Parking */,
+				A5EE608C1DE2DA9400352F6D /* Products */,
+				016599A5AEDAE2CF6C9652F4 /* Pods */,
+				4F8F402070A5C1C87D0518D7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		A5EE608C1DE2DA9400352F6D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE608B1DE2DA9400352F6D /* Car Parking.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A5EE608D1DE2DA9400352F6D /* Car Parking */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60AC1DE3142900352F6D /* ViewControllers */,
+				A5EE60AA1DE2F7C600352F6D /* Models */,
+				A5EE60A51DE2F59600352F6D /* Views */,
+				A5EE60911DE2DA9400352F6D /* AppDelegate.h */,
+				A5EE60921DE2DA9400352F6D /* AppDelegate.m */,
+				A5EE60971DE2DA9400352F6D /* Main.storyboard */,
+				A5EE609A1DE2DA9400352F6D /* Assets.xcassets */,
+				A5EE609C1DE2DA9400352F6D /* LaunchScreen.storyboard */,
+				A5EE609F1DE2DA9400352F6D /* Info.plist */,
+				A5EE608E1DE2DA9400352F6D /* Supporting Files */,
+			);
+			path = "Car Parking";
+			sourceTree = "<group>";
+		};
+		A5EE608E1DE2DA9400352F6D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE608F1DE2DA9400352F6D /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A5EE60A51DE2F59600352F6D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60B21DE42A9E00352F6D /* ParkingCellLayout */,
+				A5EE60A61DE2F59600352F6D /* PrakingCell */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A5EE60A61DE2F59600352F6D /* PrakingCell */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60A71DE2F5AA00352F6D /* ParkingCell.h */,
+				A5EE60A81DE2F5AA00352F6D /* ParkingCell.m */,
+			);
+			path = PrakingCell;
+			sourceTree = "<group>";
+		};
+		A5EE60AA1DE2F7C600352F6D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60AB1DE2F7C600352F6D /* Parking */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A5EE60AB1DE2F7C600352F6D /* Parking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Parking;
+			sourceTree = "<group>";
+		};
+		A5EE60AC1DE3142900352F6D /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60AD1DE3142900352F6D /* ParkingLayoutVC */,
+				A5EE60AE1DE3142900352F6D /* ParkingVC */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		A5EE60AD1DE3142900352F6D /* ParkingLayoutVC */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60AF1DE3145300352F6D /* ParkingLayoutVC.h */,
+				A5EE60B01DE3145300352F6D /* ParkingLayoutVC.m */,
+			);
+			path = ParkingLayoutVC;
+			sourceTree = "<group>";
+		};
+		A5EE60AE1DE3142900352F6D /* ParkingVC */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60941DE2DA9400352F6D /* ViewController.h */,
+				A5EE60951DE2DA9400352F6D /* ViewController.m */,
+			);
+			path = ParkingVC;
+			sourceTree = "<group>";
+		};
+		A5EE60B21DE42A9E00352F6D /* ParkingCellLayout */ = {
+			isa = PBXGroup;
+			children = (
+				A5EE60B31DE42AC500352F6D /* ParkingCellLayout.h */,
+				A5EE60B41DE42AC500352F6D /* ParkingCellLayout.m */,
+			);
+			path = ParkingCellLayout;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A5EE608A1DE2DA9400352F6D /* Car Parking */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5EE60A21DE2DA9400352F6D /* Build configuration list for PBXNativeTarget "Car Parking" */;
+			buildPhases = (
+				4F4E3CEA8FF28C1296139326 /* [CP] Check Pods Manifest.lock */,
+				A5EE60871DE2DA9400352F6D /* Sources */,
+				A5EE60881DE2DA9400352F6D /* Frameworks */,
+				A5EE60891DE2DA9400352F6D /* Resources */,
+				D010A43749B9B3ACE9D47C14 /* [CP] Embed Pods Frameworks */,
+				0E8A42A1D9D56F35E1752D7B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Car Parking";
+			productName = "Car Parking";
+			productReference = A5EE608B1DE2DA9400352F6D /* Car Parking.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A5EE60831DE2DA9400352F6D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "NIIT Technologies";
+				TargetAttributes = {
+					A5EE608A1DE2DA9400352F6D = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = E9Y8H45NKU;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A5EE60861DE2DA9400352F6D /* Build configuration list for PBXProject "Car Parking" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A5EE60821DE2DA9400352F6D;
+			productRefGroup = A5EE608C1DE2DA9400352F6D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A5EE608A1DE2DA9400352F6D /* Car Parking */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A5EE60891DE2DA9400352F6D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5EE609E1DE2DA9400352F6D /* LaunchScreen.storyboard in Resources */,
+				A5EE609B1DE2DA9400352F6D /* Assets.xcassets in Resources */,
+				A5EE60991DE2DA9400352F6D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0E8A42A1D9D56F35E1752D7B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Car Parking/Pods-Car Parking-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4F4E3CEA8FF28C1296139326 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D010A43749B9B3ACE9D47C14 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Car Parking/Pods-Car Parking-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A5EE60871DE2DA9400352F6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5EE60A91DE2F5AA00352F6D /* ParkingCell.m in Sources */,
+				A5EE60961DE2DA9400352F6D /* ViewController.m in Sources */,
+				A5EE60B51DE42AC500352F6D /* ParkingCellLayout.m in Sources */,
+				A5EE60931DE2DA9400352F6D /* AppDelegate.m in Sources */,
+				A5EE60B11DE3145300352F6D /* ParkingLayoutVC.m in Sources */,
+				A5EE60901DE2DA9400352F6D /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		A5EE60971DE2DA9400352F6D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5EE60981DE2DA9400352F6D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A5EE609C1DE2DA9400352F6D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5EE609D1DE2DA9400352F6D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A5EE60A01DE2DA9400352F6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A5EE60A11DE2DA9400352F6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A5EE60A31DE2DA9400352F6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7266D83F8A126DF397B268EA /* Pods-Car Parking.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = E9Y8H45NKU;
+				INFOPLIST_FILE = "Car Parking/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.niit-tech.demo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A5EE60A41DE2DA9400352F6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D7C5C1FD410A6DED11D0A03B /* Pods-Car Parking.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = E9Y8H45NKU;
+				INFOPLIST_FILE = "Car Parking/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.niit-tech.demo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A5EE60861DE2DA9400352F6D /* Build configuration list for PBXProject "Car Parking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5EE60A01DE2DA9400352F6D /* Debug */,
+				A5EE60A11DE2DA9400352F6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5EE60A21DE2DA9400352F6D /* Build configuration list for PBXNativeTarget "Car Parking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5EE60A31DE2DA9400352F6D /* Debug */,
+				A5EE60A41DE2DA9400352F6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A5EE60831DE2DA9400352F6D /* Project object */;
+}
