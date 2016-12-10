@@ -28,6 +28,11 @@
                            nil];
     
     [ProgressHUD show:@"Loading praking info \n please wait..."];
+    
+    NSLog(@"Array =%@",[self.arrParkingInfo valueForKey:@"name"]);
+    
+    //[self makeAPIRequest];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -39,6 +44,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 #pragma mark- UINavigationBarButtonAction
 

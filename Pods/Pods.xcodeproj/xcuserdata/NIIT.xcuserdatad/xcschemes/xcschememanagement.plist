@@ -9,12 +9,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>PNChart.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Car Parking.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>ProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>UICountingLabel.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -27,12 +37,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4FFC07CAA6416BF7EB1CD8169E6EBA74</key>
+		<key>11929A53A8AD141288485C2968E5803E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6FCA609D0CA78E03BEF54D0C0BE0F25</key>
+		<key>18D2D9EB58B99F7F675B29D7B1483A00</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7CEEB7F4CD0B847C8524FB6C3FD41570</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BFD7485DF2EA20AA2C56E6BDD26BB4B5</key>
 		<dict>
 			<key>primary</key>
 			<true/>

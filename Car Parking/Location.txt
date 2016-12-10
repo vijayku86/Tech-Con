@@ -1,0 +1,492 @@
+[
+{
+"_id": "PGFA01",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA02",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA03",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA04",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA05",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA06",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA07",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA08",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFA09",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFA10",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA11",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFA12",
+"location": "Ground Floor",
+"block": "A1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFA13",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA14",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFA15",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFA16",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA17",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFA18",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFA19",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFA20",
+"location": "Ground Floor",
+"block": "A2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFB01",
+"location": "Ground Floor",
+"block": "B1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFB02",
+"location": "Ground Floor",
+"block": "B1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFB03",
+"location": "Ground Floor",
+"block": "B1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFB04",
+"location": "Ground Floor",
+"block": "B1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFB05",
+"location": "Ground Floor",
+"block": "B1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFB06",
+"location": "Ground Floor",
+"block": "B2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFB07",
+"location": "Ground Floor",
+"block": "B2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFB08",
+"location": "Ground Floor",
+"block": "B2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFB09",
+"location": "Ground Floor",
+"block": "B2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFB10",
+"location": "Ground Floor",
+"block": "B2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFC01",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC02",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFC03",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC04",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC05",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC06",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC07",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC08",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFC09",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFC10",
+"location": "Ground Floor",
+"block": "C1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFC11",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFC12",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC13",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC14",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFC15",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC16",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFC17",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC18",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC19",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFC20",
+"location": "Ground Floor",
+"block": "C2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD01",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFD02",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD03",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFD04",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD05",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD06",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": true,
+"image": "../../app/public/images/car-down.jpg"
+},
+{
+"_id": "PGFD07",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD08",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD09",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD10",
+"location": "Ground Floor",
+"block": "D1",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD11",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFD12",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD13",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFD14",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD15",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD16",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFD17",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD18",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": true,
+"image": "../../app/public/images/car-up.jpg"
+},
+{
+"_id": "PGFD19",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": false,
+"image": null
+},
+{
+"_id": "PGFD20",
+"location": "Ground Floor",
+"block": "D2",
+"occupied": false,
+"image": null
+}
+]
