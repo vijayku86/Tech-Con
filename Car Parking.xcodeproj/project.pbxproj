@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A503905E1DF56FE700D91624 /* ParkingItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A503905D1DF56FE700D91624 /* ParkingItemView.m */; };
 		A50390601DF5707900D91624 /* ParkingItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A503905F1DF5707900D91624 /* ParkingItemView.xib */; };
+		A54388751DFD2557006DBE4B /* LaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A54388741DFD2557006DBE4B /* LaunchViewController.m */; };
 		A5EBF0BA1DF69401009466A4 /* Parking.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EBF0B91DF69401009466A4 /* Parking.m */; };
 		A5EBF0BD1DF69971009466A4 /* ParkingParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EBF0BC1DF69971009466A4 /* ParkingParser.m */; };
 		A5EBF0BF1DF6AEFC009466A4 /* Location.txt in Resources */ = {isa = PBXBuildFile; fileRef = A5EBF0BE1DF6AEFC009466A4 /* Location.txt */; };
@@ -21,15 +22,19 @@
 		A5EE60A91DE2F5AA00352F6D /* ParkingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60A81DE2F5AA00352F6D /* ParkingCell.m */; };
 		A5EE60B11DE3145300352F6D /* ParkingLayoutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60B01DE3145300352F6D /* ParkingLayoutVC.m */; };
 		A5EE60B51DE42AC500352F6D /* ParkingCellLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A5EE60B41DE42AC500352F6D /* ParkingCellLayout.m */; };
-		EBC1094657489648E2B5E5F7 /* libPods-Car Parking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1EEB292680E27369DF1AE3 /* libPods-Car Parking.a */; };
+		A5F90D841DFEB37D000E568D /* CustomPathDrawer.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F90D831DFEB37D000E568D /* CustomPathDrawer.m */; };
+		ED803CDDF57864BD8B248B4C /* Pods_Car_Parking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4320F7501CD5F7F52A0A45B3 /* Pods_Car_Parking.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A1EEB292680E27369DF1AE3 /* libPods-Car Parking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Car Parking.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4320F7501CD5F7F52A0A45B3 /* Pods_Car_Parking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Car_Parking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7266D83F8A126DF397B268EA /* Pods-Car Parking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Car Parking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Car Parking/Pods-Car Parking.debug.xcconfig"; sourceTree = "<group>"; };
 		A503905C1DF56FE700D91624 /* ParkingItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParkingItemView.h; sourceTree = "<group>"; };
 		A503905D1DF56FE700D91624 /* ParkingItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParkingItemView.m; sourceTree = "<group>"; };
 		A503905F1DF5707900D91624 /* ParkingItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ParkingItemView.xib; sourceTree = "<group>"; };
+		A52F35061E1A321A00C020DF /* Car Parking-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Car Parking-Bridging-Header.h"; sourceTree = "<group>"; };
+		A54388731DFD2557006DBE4B /* LaunchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchViewController.h; sourceTree = "<group>"; };
+		A54388741DFD2557006DBE4B /* LaunchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchViewController.m; sourceTree = "<group>"; };
 		A5EBF0B81DF69401009466A4 /* Parking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parking.h; sourceTree = "<group>"; };
 		A5EBF0B91DF69401009466A4 /* Parking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parking.m; sourceTree = "<group>"; };
 		A5EBF0BB1DF69971009466A4 /* ParkingParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParkingParser.h; sourceTree = "<group>"; };
@@ -51,6 +56,8 @@
 		A5EE60B01DE3145300352F6D /* ParkingLayoutVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParkingLayoutVC.m; sourceTree = "<group>"; };
 		A5EE60B31DE42AC500352F6D /* ParkingCellLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParkingCellLayout.h; sourceTree = "<group>"; };
 		A5EE60B41DE42AC500352F6D /* ParkingCellLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParkingCellLayout.m; sourceTree = "<group>"; };
+		A5F90D821DFEB37D000E568D /* CustomPathDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPathDrawer.h; sourceTree = "<group>"; };
+		A5F90D831DFEB37D000E568D /* CustomPathDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPathDrawer.m; sourceTree = "<group>"; };
 		D7C5C1FD410A6DED11D0A03B /* Pods-Car Parking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Car Parking.release.xcconfig"; path = "Pods/Target Support Files/Pods-Car Parking/Pods-Car Parking.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBC1094657489648E2B5E5F7 /* libPods-Car Parking.a in Frameworks */,
+				ED803CDDF57864BD8B248B4C /* Pods_Car_Parking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +85,7 @@
 		4F8F402070A5C1C87D0518D7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0A1EEB292680E27369DF1AE3 /* libPods-Car Parking.a */,
+				4320F7501CD5F7F52A0A45B3 /* Pods_Car_Parking.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -91,6 +98,15 @@
 				A503905F1DF5707900D91624 /* ParkingItemView.xib */,
 			);
 			path = ItemCell;
+			sourceTree = "<group>";
+		};
+		A54388721DFD2524006DBE4B /* LaunchVC */ = {
+			isa = PBXGroup;
+			children = (
+				A54388731DFD2557006DBE4B /* LaunchViewController.h */,
+				A54388741DFD2557006DBE4B /* LaunchViewController.m */,
+			);
+			path = LaunchVC;
 			sourceTree = "<group>";
 		};
 		A5EBF0C01DF6E8E2009466A4 /* API Engine */ = {
@@ -166,6 +182,7 @@
 		A5EE60AA1DE2F7C600352F6D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A5F90D811DFEB33B000E568D /* PathDrawer */,
 				A5EBF0C01DF6E8E2009466A4 /* API Engine */,
 				A5EE60AB1DE2F7C600352F6D /* Parking */,
 			);
@@ -186,6 +203,7 @@
 		A5EE60AC1DE3142900352F6D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A54388721DFD2524006DBE4B /* LaunchVC */,
 				A5EE60AD1DE3142900352F6D /* ParkingLayoutVC */,
 				A5EE60AE1DE3142900352F6D /* ParkingVC */,
 			);
@@ -217,6 +235,16 @@
 				A5EE60B41DE42AC500352F6D /* ParkingCellLayout.m */,
 			);
 			path = ParkingCellLayout;
+			sourceTree = "<group>";
+		};
+		A5F90D811DFEB33B000E568D /* PathDrawer */ = {
+			isa = PBXGroup;
+			children = (
+				A5F90D821DFEB37D000E568D /* CustomPathDrawer.h */,
+				A5F90D831DFEB37D000E568D /* CustomPathDrawer.m */,
+				A52F35061E1A321A00C020DF /* Car Parking-Bridging-Header.h */,
+			);
+			path = PathDrawer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,6 +282,7 @@
 					A5EE608A1DE2DA9400352F6D = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = E9Y8H45NKU;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -347,9 +376,11 @@
 				A5EBF0BA1DF69401009466A4 /* Parking.m in Sources */,
 				A503905E1DF56FE700D91624 /* ParkingItemView.m in Sources */,
 				A5EE60A91DE2F5AA00352F6D /* ParkingCell.m in Sources */,
+				A54388751DFD2557006DBE4B /* LaunchViewController.m in Sources */,
 				A5EE60961DE2DA9400352F6D /* ViewController.m in Sources */,
 				A5EE60B51DE42AC500352F6D /* ParkingCellLayout.m in Sources */,
 				A5EE60931DE2DA9400352F6D /* AppDelegate.m in Sources */,
+				A5F90D841DFEB37D000E568D /* CustomPathDrawer.m in Sources */,
 				A5EE60B11DE3145300352F6D /* ParkingLayoutVC.m in Sources */,
 				A5EBF0BD1DF69971009466A4 /* ParkingParser.m in Sources */,
 				A5EE60901DE2DA9400352F6D /* main.m in Sources */,
@@ -402,6 +433,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -421,6 +453,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_MODULE_NAME = "Car Parking";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -449,6 +482,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -461,6 +495,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_MODULE_NAME = "Car Parking";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -471,12 +506,16 @@
 			baseConfigurationReference = 7266D83F8A126DF397B268EA /* Pods-Car Parking.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = E9Y8H45NKU;
 				INFOPLIST_FILE = "Car Parking/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.niit-tech.demo1";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.niit-tech.demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Car Parking/Models/PathDrawer/Car Parking-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -485,12 +524,15 @@
 			baseConfigurationReference = D7C5C1FD410A6DED11D0A03B /* Pods-Car Parking.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = E9Y8H45NKU;
 				INFOPLIST_FILE = "Car Parking/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.niit-tech.demo1";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.niit-tech.demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Car Parking/Models/PathDrawer/Car Parking-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

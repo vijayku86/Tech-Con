@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>LTMorphingLabel.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MFSideMenu.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,27 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0FB3864CF47A4C4BD1587783785938C3</key>
+		<key>016D982990393D4CF14C8AE7998AEC65</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>11929A53A8AD141288485C2968E5803E</key>
+		<key>3C900E8E2449EBBCC12128A9BDA69E7F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>18D2D9EB58B99F7F675B29D7B1483A00</key>
+		<key>6C18C789438292FED01EB702705FC9AA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7CEEB7F4CD0B847C8524FB6C3FD41570</key>
+		<key>87C61E49A0471BB1F53FE59DAB5F9502</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BFD7485DF2EA20AA2C56E6BDD26BB4B5</key>
+		<key>9A923F554FE24682810ED75DC853CD39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BE9A3F938BFCF671A2AB4C0638137971</key>
 		<dict>
 			<key>primary</key>
 			<true/>

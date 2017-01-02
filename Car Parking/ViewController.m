@@ -9,7 +9,13 @@
 #import "ViewController.h"
 #import "ProgressHUD.h"
 #import "ParkingCell.h"
-@interface ViewController ()
+# import "PNChart.h"
+
+#define PieChartWidth    240
+#define PieChartHeight   240
+
+
+@interface ViewController ()<PNChartDelegate>
 
 @end
 
@@ -22,7 +28,7 @@
     [super viewDidLoad];
     
     self.arrParkingInfo = [NSMutableArray arrayWithObjects:
-                           [self dictWithName:@"Ground Floor" slots:@"155" occupied:@"35"],
+                           [self dictWithName:@"Ground Floor" slots:@"104" occupied:@"35"],
                            [self dictWithName:@"First Floor" slots:@"125" occupied:@"65"],
                            [self dictWithName:@"Second Floor" slots:@"105" occupied:@"85"],
                            nil];
@@ -60,14 +66,17 @@
     [self performSelector:@selector(dismissHUD) withObject:nil afterDelay:0.5];
 }
 
+
 #pragma mark- UITableViewDelegate- UITableViewDataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.arrParkingInfo count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     static NSString* cellIdentifier = @"ParkingCellIdentifier";
     ParkingCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    cell.backgroundColor = [UIColor clearColor];
     if(!cell){
         return nil;
     }
@@ -87,4 +96,66 @@
         [self performSegueWithIdentifier:@"showParkingLayoutDetails" sender:nil];
     }
 }
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    CGRect bounds = tableView.bounds;
+    if(!tableHeaderView){
+        tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(bounds), 300)];
+        tableHeaderView.backgroundColor = [UIColor clearColor];
+        
+        pieChart = [self refreshPieChart];
+        
+        [tableHeaderView addSubview:pieChart];
+    }
+    return tableHeaderView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 300;
+}
+
+#pragma mark- PieHelpers 
+-(PNPieChart*)refreshPieChart {
+    if (pieChart) {
+        [pieChart  removeFromSuperview];
+    }
+    
+    NSDictionary* dictGF = [self.arrParkingInfo objectAtIndex:0];
+    NSDictionary* dictB1 = [self.arrParkingInfo objectAtIndex:1];
+    NSDictionary* dictB2 = [self.arrParkingInfo objectAtIndex:2];
+    
+    
+    float occupiedPerOfA = ([[dictGF objectForKey:@"percent"] floatValue]/[[dictGF objectForKey:@"slots"] floatValue])*100;
+    
+    float occupiedPerOfB1 = ([[dictB1 objectForKey:@"percent"] floatValue]/[[dictB1 objectForKey:@"slots"] floatValue])*100;
+    
+    float occupiedPerOfB2 = ([[dictB2 objectForKey:@"percent"] floatValue]/[[dictB2 objectForKey:@"slots"] floatValue])*100;
+    
+    NSArray *items = @[[PNPieChartDataItem dataItemWithValue:occupiedPerOfA color:PNRed description:@"GF"],
+                       [PNPieChartDataItem dataItemWithValue:occupiedPerOfB1 color:PNBlue description:@"B1"],
+                       [PNPieChartDataItem dataItemWithValue:occupiedPerOfB2 color:[UIColor orangeColor] description:@"B2"],
+                       ];
+    
+    int xPOS  = self.tblParkingsView.center.x - (PieChartWidth/2);
+    
+    
+    PNPieChart *pChart = [[PNPieChart alloc] initWithFrame:CGRectMake(xPOS, 20, 240.0, 240.0) items:items];
+    pChart.descriptionTextColor = [UIColor whiteColor];
+    pChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:14.0];
+    pChart.delegate = self;
+    [pChart strokeChart];
+    
+    return pChart;
+}
+
+#pragma mark- PieChartDelegate
+- (void)userClickedOnPieIndexItem:(NSInteger)pieIndex{
+    if ([self.arrParkingInfo count]>pieIndex) {
+        [self performSegueWithIdentifier:@"showParkingLayoutDetails" sender:nil];
+    }
+}
+- (void)didUnselectPieItem{
+    
+}
+
 @end

@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface ViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
+@class PNPieChart;
+@interface ViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
+    UIView* tableHeaderView;
+    PNPieChart* pieChart;
+}
 @property (nonatomic,strong)IBOutlet UITableView* tblParkingsView;
 @property (nonatomic,strong)         NSMutableArray* arrParkingInfo;
 

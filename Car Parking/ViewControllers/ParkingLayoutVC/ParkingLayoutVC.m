@@ -11,11 +11,13 @@
 #import "ProgressHUD.h"
 #import "ParkingItemView.h"
 #import "ParkingParser.h"
+#import "CustomPathDrawer.h"
 
 #define ASCII_VALUE_A   65
 #define PARKING_BASESTR_GROUNDFLOOR     "PGF"
-@interface ParkingLayoutVC ()
-
+#define BASE_URL        "http://192.168.1.103:3000/"
+@interface ParkingLayoutVC ()<ParkingItemViewDelegate>
+@property(nonatomic,strong) CustomPathDrawer* cp;
 @end
 
 @implementation ParkingLayoutVC
@@ -47,6 +49,7 @@ UIView * prevView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.cp = nil;
 //    UICollectionViewDelegateFlowLayout
     [self.navigationController setNavigationBarHidden:NO];
     // Do any additional setup after loading the view.
@@ -104,7 +107,7 @@ UIView * prevView;
     [super viewDidAppear:animated];
     
     [self response];
-    //[self makeAPIRequest];
+//    [self makeAPIRequest];
     [ProgressHUD dismiss];
 }
 
@@ -114,10 +117,13 @@ UIView * prevView;
 }
 #pragma mark- BarButtonAction
 -(IBAction)refreshBarButtonAction:(id)sender{
+    if(self.cp){
+        [self.cp removeLayer];
+    }
     [ProgressHUD show:@"Refreshing please wait..."];
     [self.arrLocations removeAllObjects];
-    [self response];
-    //[self makeAPIRequest];
+    //[self response];
+    [self makeAPIRequest];
 }
 
 #pragma mark-
@@ -140,7 +146,7 @@ UIView * prevView;
             NSLog(@"Error Desc: %@",[error debugDescription]);
         }
     }
-    return [NSMutableArray new];
+    return self.arrLocations;
 }
 
 -(void)drawParkingLayout{
@@ -161,9 +167,9 @@ UIView * prevView;
             
             NSString* cellId = [NSString stringWithFormat:@"%@%.02d",baseIdentifier,i];
             if(i <= itemsCountInAblock/2){
-                piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId];
+                piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
             }else{
-                piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId];
+                piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -263,17 +269,89 @@ UIView * prevView;
     }];
 }
 
--(void)makeAPIRequest{
-    [ProgressHUD show:@"Loading please wait..."];
-    NSURL *url = [NSURL URLWithString:@"http://192.168.1.101:3000/api/sensors?"];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+-(NSData*)sendRequestToServer:(NSURL*)url {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setTimeoutInterval:30];
     NSURLResponse *response;
     NSError *error;
     //send it synchronous
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+    if (error) {
+        return nil;
+    }
+    return responseData;
+}
+
+-(void)getParkingSlots{
+    //'http://lap-tz-0X63284A:3000/api/sort/ground/A1
+    [ProgressHUD show:@"Loading please wait..."];
+    NSError *error;
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@",BASE_URL,@"api/sort/ground/A1?"] ];
+    NSData *responseData = [self sendRequestToServer:url];
+    //    NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+    // check for an error. If there is a network error, you should handle it here.
+    if(error)
+    {
+        //log response
+        [self showAlert:error];
+    }
+    else{
+        NSError* serverError = nil;
+        NSArray* arrRecords = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+        
+        if(!serverError){
+            NSLog(@"Response = %@",arrRecords);
+            if ([arrRecords count]>0) {
+                
+                
+                NSDictionary* response = [arrRecords objectAtIndex:0];
+                NSString* emptySlotIdentifer = [response valueForKey:@"_id"];
+                
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Parking Info" message:[NSString stringWithFormat:@"Suggested parking space for you %@",emptySlotIdentifer] preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction * done = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                    UIView* containerView = [self containerBlockViewWithIdentifier:emptySlotIdentifer];
+                    int index = [self indexFromIdentifer:emptySlotIdentifer];
+                    ParkingItemView* itemView = [self viewWithIdentifier:emptySlotIdentifer index:index];
+                    
+                    if(self.cp){
+                        [self.cp removeLayer];
+                    }
+                    
+                    int slots = containerView.tag == 2?10:20;
+                    self.cp = [[CustomPathDrawer alloc] init];
+                    [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots];
+                    
+                }];
+                [alert addAction:done];
+                [self presentViewController:alert animated:YES completion:^{
+                    
+                }];
+                
+                
+                
+                
+                
+            }
+            
+            [self fillSubviewWithInfo:nil];
+        }
+        else{
+            NSLog(@"Error Desc: %@",[error debugDescription]);
+            [self showAlert:error];
+        }
+        
+    }
+    [ProgressHUD dismiss];
+    
+}
+
+-(void)makeAPIRequest{
+    [ProgressHUD show:@"Loading please wait..."];
+    NSError *error = nil;
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@",BASE_URL,@"api/sensors"]];
+    NSData *responseData = [self sendRequestToServer:url];
+//    NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
     // check for an error. If there is a network error, you should handle it here.
     if(error)
     {
@@ -289,6 +367,7 @@ UIView * prevView;
             self.arrLocations = [NSMutableArray arrayWithArray:[ParkingParser parseLocationData:arrRecords]];
             
             [self fillSubviewWithInfo:nil];
+            [self getParkingSlots];
         }
         else{
             NSLog(@"Error Desc: %@",[error debugDescription]);
@@ -344,6 +423,15 @@ UIView * prevView;
 //    NSArray* arrBlockC = [self.arrLocations valueForKey:@"C"];
 //    NSArray* arrBlockD = [self.arrLocations valueForKey:@"D"];
     
+}
+
+-(int)indexFromIdentifer:(NSString*)identifier{
+    int index = 0;
+    if (identifier.length>=6) {
+        NSString* substring = [identifier substringFromIndex:4];
+        index = [substring intValue];
+    }
+    return index-1;
 }
 
 -(void)fillSubviewWithInfo:(NSDictionary*)dic {
@@ -411,9 +499,69 @@ UIView * prevView;
     
     [ProgressHUD dismiss];
     
+    
+//    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+//    shapeLayer.path = [self createPath].CGPath;
+//    shapeLayer.fillColor = nil;
+//    shapeLayer.opacity = 1.0;
+//    shapeLayer.lineWidth = 2.0;
+//    shapeLayer.strokeColor = [UIColor redColor].CGColor;
+//    [self.parkingScrollview.layer addSublayer:shapeLayer];
+    
+//    CustomPathDrawer* cp = [[CustomPathDrawer alloc] init];
+//    
+//    ParkingItemView* view = [self viewWithIdentifier:@"PGFA05" index:5];
+//    CAShapeLayer* shapeLayer = [cp drawPathForItem:view];
+//    [self.parkingScrollview.layer addSublayer:shapeLayer];
 
     
 }
+
+- (UIBezierPath*)createPath
+{
+    UIBezierPath* path = [[UIBezierPath alloc]init];
+    [path moveToPoint:CGPointMake(10, 300)];
+    [path addLineToPoint:CGPointMake(600.0,300.0)];
+    [path addLineToPoint:CGPointMake(600.0,280.0)];
+//    [path addLineToPoint:CGPointMake(200.0, 500)];
+//    [path addLineToPoint:CGPointMake(200.0, 500.0)];
+    //[path closePath];
+    //[path stroke];
+    [[UIColor blueColor] set];
+    return path;
+}
+
+#pragma mark- ParkingItemViewDelegate 
+-(void)containerView:(UIView *)containerView item:(id)itemView itemClickedAtIndex:(NSInteger)index{
+    
+    if(self.cp){
+        [self.cp removeLayer];
+    }
+    
+    int slots = containerView.tag == 2?10:20;
+    self.cp = [[CustomPathDrawer alloc] init];
+    [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots];
+    
+    UIImage *movingImage = [UIImage imageNamed:@"small_car.png"];
+    CALayer *movingLayer = [CALayer layer];
+    movingLayer.contents = (id)movingImage.CGImage;
+    movingLayer.anchorPoint = CGPointZero;
+    
+    movingLayer.frame = CGRectMake(0.0f, 0.0f, movingImage.size.width, movingImage.size.height);
+    [self.parkingScrollview.layer addSublayer:movingLayer];
+    
+    CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    pathAnimation.duration = 8.0f;
+    pathAnimation.path = [self.cp getPath].CGPath;
+    pathAnimation.rotationMode = kCAAnimationRotateAuto;
+    pathAnimation.calculationMode = kCAAnimationLinear;
+    
+    pathAnimation.fillMode = kCAFillModeForwards;
+    pathAnimation.removedOnCompletion = false;
+    
+    [movingLayer addAnimation:pathAnimation forKey:@"movingAnimation"];
+}
+
 
 /*
 #pragma mark- LayoutDelegate
