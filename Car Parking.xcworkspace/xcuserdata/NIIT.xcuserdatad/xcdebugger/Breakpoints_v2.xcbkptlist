@@ -19,13 +19,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Car Parking/ViewControllers/ParkingLayoutVC/ParkingLayoutVC.m"
-            timestampString = "504713019.654584"
+            filePath = "Car Parking/Models/PathDrawer/CustomPathDrawer.m"
+            timestampString = "505128162.399938"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "355"
-            endingLineNumber = "355"
-            landmarkName = "-makeAPIRequest"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "-drawPathOnLayer:FromView:toItem:totalSlots:isSuggestedPath:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -36,27 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Car Parking/Models/PathDrawer/CustomPathDrawer.m"
-            timestampString = "504544230.516712"
+            timestampString = "505128162.399938"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
-            landmarkName = "-drawPathOnLayer:FromView:toItem:totalSlots:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Car Parking/Models/PathDrawer/CustomPathDrawer.m"
-            timestampString = "504085150.069654"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-moveToItemAtFirstHalfOfBlockC:"
             landmarkType = "7">
          </BreakpointContent>
@@ -68,12 +52,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Car Parking/ViewControllers/ParkingLayoutVC/ParkingLayoutVC.m"
-            timestampString = "504713019.654584"
+            timestampString = "505649012.491415"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
-            landmarkName = "-getParkingSlots"
+            startingLineNumber = "1049"
+            endingLineNumber = "1049"
+            landmarkName = "-checkPointServiceRFID"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -84,12 +68,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Car Parking/ViewControllers/ParkingLayoutVC/ParkingLayoutVC.m"
-            timestampString = "504713019.654584"
+            timestampString = "505649012.491415"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "333"
-            endingLineNumber = "333"
-            landmarkName = "-getParkingSlots"
+            startingLineNumber = "1053"
+            endingLineNumber = "1053"
+            landmarkName = "-checkPointServiceRFID"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -100,12 +84,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Car Parking/ViewControllers/ParkingLayoutVC/ParkingLayoutVC.m"
-            timestampString = "504713019.654584"
+            timestampString = "505649012.491415"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "429"
-            endingLineNumber = "429"
-            landmarkName = "-indexFromIdentifer:"
+            startingLineNumber = "1040"
+            endingLineNumber = "1040"
+            landmarkName = "-checkPointServiceRFID"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

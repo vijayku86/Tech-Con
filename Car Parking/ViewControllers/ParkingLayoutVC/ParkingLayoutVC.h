@@ -10,6 +10,14 @@
 
 @interface ParkingLayoutVC : UIViewController
 
+{
+    NSTimer* layoutTimer,*timerRFID;
+    CALayer *movingLayer;
+    BOOL checkPoint1_RFID,checkPoint2_RFID,checkPoint3_RFID;;
+    BOOL isTrackSuggestedPath;
+    UIImageView* imageViewCar;
+}
+
 @property (nonatomic, strong)IBOutlet UIView* blockInfoView;
 @property (nonatomic, strong)IBOutlet UIScrollView* scrllView;
 
@@ -22,6 +30,11 @@
 @property (nonatomic, strong)IBOutlet UIView* blockViewD;
 
 @property (nonatomic, strong)NSMutableArray* arrBlocksView;
+
+- (void)someFunc:(void(^)(NSData*))someBlock;
+
+
+- (void)sendRequestToServer:(NSURL*)url completionHander:(void(^)(NSData* responseData,NSError* error))completionHander;
 //Data arrays
 @property (nonatomic, strong)NSMutableArray* arrLocations;
 @end

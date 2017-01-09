@@ -27,10 +27,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+
+    
     self.arrParkingInfo = [NSMutableArray arrayWithObjects:
-                           [self dictWithName:@"Ground Floor" slots:@"104" occupied:@"35"],
-                           [self dictWithName:@"First Floor" slots:@"125" occupied:@"65"],
-                           [self dictWithName:@"Second Floor" slots:@"105" occupied:@"85"],
+                           [self dictWithName:@"Ground Floor" slots:@"64" occupied:@"34"],
+                           [self dictWithName:@"Basement 1" slots:@"125" occupied:@"65"],
+                           [self dictWithName:@"Basement 2" slots:@"105" occupied:@"85"],
                            nil];
     
     [ProgressHUD show:@"Loading praking info \n please wait..."];

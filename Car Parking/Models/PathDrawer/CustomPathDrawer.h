@@ -18,7 +18,7 @@
 #define GapHorizonalBtwBlocks       80
 #define leftMarginFromContainer     21
 #define ConstanceDifference         35
-#define HorizontalSpacing           40
+#define HorizontalSpacing           45
 #define VerticalSpacing             20
 #define PATH_COLOR                  [UIColor cyanColor]
 #define PATH_OPACITY                0.75f
@@ -57,14 +57,17 @@
 {
     CAShapeLayer* shapeLayer;
     UIBezierPath* bezierPath;
+    BOOL isSuggestedPath;
+    
 }
+@property(nonatomic,strong)NSMutableArray* arrSuggestedPathPoints;
 
 -(UIBezierPath*)getPath;
 -(CALayer*)getPathLayer;
 -(void) drawPathOnLayer:(CALayer*)superviewLayer toItem:(ParkingItemView*)item;
 -(id)drawPathForItem:(ParkingItemView*)itemView;
 
--(void)drawPathOnLayer:(CALayer*)superviewLayer FromView:(UIView*)containerView toItem:(ParkingItemView*)item totalSlots:(int)slots ;
+-(void)drawPathOnLayer:(CALayer*)superviewLayer FromView:(UIView*)containerView toItem:(ParkingItemView*)item totalSlots:(int)slots isSuggestedPath:(BOOL)suggestedPath;
 
 -(void)removeLayer;
 @end

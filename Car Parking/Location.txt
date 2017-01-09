@@ -108,36 +108,8 @@
 "_id": "PGFA16",
 "location": "Ground Floor",
 "block": "A2",
-"occupied": false,
-"image": null
-},
-{
-"_id": "PGFA17",
-"location": "Ground Floor",
-"block": "A2",
 "occupied": true,
 "image": "../../app/public/images/car-up.jpg"
-},
-{
-"_id": "PGFA18",
-"location": "Ground Floor",
-"block": "A2",
-"occupied": true,
-"image": "../../app/public/images/car-up.jpg"
-},
-{
-"_id": "PGFA19",
-"location": "Ground Floor",
-"block": "A2",
-"occupied": false,
-"image": null
-},
-{
-"_id": "PGFA20",
-"location": "Ground Floor",
-"block": "A2",
-"occupied": false,
-"image": null
 },
 {
 "_id": "PGFB01",
@@ -330,20 +302,6 @@
 },
 {
 "_id": "PGFC18",
-"location": "Ground Floor",
-"block": "C2",
-"occupied": false,
-"image": null
-},
-{
-"_id": "PGFC19",
-"location": "Ground Floor",
-"block": "C2",
-"occupied": false,
-"image": null
-},
-{
-"_id": "PGFC20",
 "location": "Ground Floor",
 "block": "C2",
 "occupied": false,

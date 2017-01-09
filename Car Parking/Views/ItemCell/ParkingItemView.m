@@ -43,7 +43,7 @@
         self = [[[NSBundle mainBundle] loadNibNamed:@"ParkingItemView" owner:self options:nil] objectAtIndex:0];
         
         self.frame = frame;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor whiteColor];
         self.isOccupied = isOccupied;
         self.cellID = parkingIdentifier;
         self.delegate = delegate;

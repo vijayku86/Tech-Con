@@ -13,10 +13,30 @@
 #import "ParkingParser.h"
 #import "CustomPathDrawer.h"
 
+//#define Test
+
 #define ASCII_VALUE_A   65
 #define PARKING_BASESTR_GROUNDFLOOR     "PGF"
-#define BASE_URL        "http://192.168.1.103:3000/"
-@interface ParkingLayoutVC ()<ParkingItemViewDelegate>
+#define BASE_URL        "http://192.168.1.105:3000/"
+
+#define BASE_URL_RFID_1     @"http://172.20.10.12:1234/"
+#define BASE_URL_RFID_2     @"http://172.20.10.11:1234/"
+#define BASE_URL_RFID_3     @"http://172.20.10.13:1234/"
+
+#define MESSAGE_RFID_CHECKPOINT_1       @"point 1 reached"
+#define MESSAGE_RFID_CHECKPOINT_2       @"point 2 reached"
+#define MESSAGE_RFID_CHECKPOINT_3       @"point 3 reached"
+
+#define RFID_CAR_ANIMATION_DURATION     0.3
+#define SELECTOR_DURATION               0.2
+
+#define COLOR_PHYSICALLY_HANDICAPPED_PARKING        [UIColor colorWithRed:0/255.0 green:0/255.0 blue:193/255.0 alpha:0.5]
+#define COLOR_RESERVERD_PARKING             [UIColor colorWithRed:255/255.0 green:182/255.0 blue:193/255.0 alpha:1]
+static int startPosY ;
+static int startPosY1 ;
+static int finalXPos;
+static int startXPos;
+@interface ParkingLayoutVC ()<ParkingItemViewDelegate,CAAnimationDelegate>
 @property(nonatomic,strong) CustomPathDrawer* cp;
 @end
 
@@ -24,32 +44,27 @@
 
 UIView * prevView;
 
--(NSString*)getBlockTitle:(int)index{
-    NSString* blockTitle = @"";
-    switch (index) {
-        case 0:
-            blockTitle = @"Block A";
-            break;
-        case 1:
-            blockTitle = @"Block B";
-            break;
-        case 2:
-            blockTitle = @"Block C";
-            break;
-        case 3:
-            blockTitle = @"Block D";
-            break;
-            
-        default:
-            blockTitle = [NSString stringWithFormat:@"Block %d",index];
-            break;
-    }
-    return blockTitle;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.cp = nil;
+    
+    startPosY = SP_START_POINT.y;
+    startPosY1 = SP_CHECK_POINT_4.y;
+    startXPos = SP_CHECK_POINT_4.x;
+    finalXPos = 265;
+    isTrackSuggestedPath = TRUE;
+    //TEsting
+#ifdef Test
+    checkPoint1_RFID = true;
+#endif
+    
+    imageViewCar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"track_top_car.png"]];
+    [imageViewCar setFrame:CGRectMake(SP_START_POINT.x, SP_START_POINT.y, 11, 28)];
+    [self.parkingScrollview addSubview:imageViewCar];
+    [self.parkingScrollview bringSubviewToFront:imageViewCar];
+    [imageViewCar setHidden:true];
+    
 //    UICollectionViewDelegateFlowLayout
     [self.navigationController setNavigationBarHidden:NO];
     // Do any additional setup after loading the view.
@@ -96,19 +111,60 @@ UIView * prevView;
     
 //    [self performSelector:@selector(drawParkingLayout) withObject:nil afterDelay:0.5];
     
-    [self drawParkingLayout];
+//    [self drawParkingLayout];
+    [self drawLayoutForParkingArea];
     [ProgressHUD show:@"Loading please wait..."];
     
     prevView = _blockViewA;
+    
+#ifndef Test
+    //Code should get executed if working on live environment
+    layoutTimer = [NSTimer scheduledTimerWithTimeInterval:60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        
+        if (self.cp) {
+            [self.cp removeLayer];
+            self.cp = nil;
+        }
+        if (movingLayer!= nil) {
+            [movingLayer removeFromSuperlayer];
+        }
+        [self getParkingDataFromServer];
+    }];
+    
+    timerRFID = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(validateIfCarIsPlacedOnRFIDSensor) userInfo:nil repeats:YES];
+#endif
+    
+    
     
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    [self response];
-//    [self makeAPIRequest];
+    
+#ifdef  Test
+        NSLog(@"Test Environment");
+        [self dataFromLocal];
+#else
+        NSLog(@"Live");
+//        [self getParkingDataFromServer];
+    [self dataFromLocal];
+#endif
     [ProgressHUD dismiss];
+    
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    if (layoutTimer) {
+        [layoutTimer invalidate];
+        layoutTimer = nil;
+    }
+    if (timerRFID) {
+        [timerRFID invalidate];
+        timerRFID = nil;
+    }
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,12 +179,12 @@ UIView * prevView;
     [ProgressHUD show:@"Refreshing please wait..."];
     [self.arrLocations removeAllObjects];
     //[self response];
-    [self makeAPIRequest];
+    [self getParkingDataFromServer];
 }
 
 #pragma mark-
 
--(NSMutableArray*) response{
+-(NSMutableArray*) dataFromLocal{
     NSString* resourcePath = [[NSBundle mainBundle] pathForResource:@"Location" ofType:@"txt"];
     NSFileManager* fmanager = [NSFileManager defaultManager];
     if ([fmanager fileExistsAtPath:resourcePath]) {
@@ -141,6 +197,7 @@ UIView * prevView;
             self.arrLocations = [NSMutableArray arrayWithArray:[ParkingParser parseLocationData:arrRecords]];
             
             [self fillSubviewWithInfo:nil];
+            [self performSelector:@selector(drawSuggestedPathWithIdentifier:) withObject:@"PGFB07" afterDelay:1];
         }
         else{
             NSLog(@"Error Desc: %@",[error debugDescription]);
@@ -210,7 +267,6 @@ UIView * prevView;
                     break;
             }
         }
-        
     }
 }
 
@@ -256,7 +312,799 @@ UIView * prevView;
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark- RFID_Path
+
+-(void)followRFID{
+    
+    if (isTrackSuggestedPath) {
+        
+        if (checkPoint1_RFID) {
+            
+            //move towards point 2
+            if (startPosY > startPosY1) {
+                imageViewCar.hidden = false;
+                [UIView animateWithDuration:RFID_CAR_ANIMATION_DURATION animations:^{
+                    startPosY = startPosY-5;
+                    [imageViewCar setFrame:CGRectMake(SP_START_POINT.x, startPosY, 11, 28)];
+#ifdef Test
+                    NSLog(@"Test");
+#else
+                    [self checkPointServiceRFID];
+#endif
+                    [self performSelector:@selector(followRFID) withObject:nil afterDelay:SELECTOR_DURATION];
+                }];
+            }else{
+#ifdef Test
+                checkPoint2_RFID = true;
+#else
+                if(!checkPoint2_RFID){
+                    [self checkPointServiceRFID];
+                    [self performSelector:@selector(followRFID) withObject:nil afterDelay:SELECTOR_DURATION];
+                }
+#endif
+            }
+            
+            if (checkPoint2_RFID) {
+                //stop timer for 1 point;
+                //directly move towards 2nd point
+                startPosY = startPosY1;
+                if (startXPos <= finalXPos) {
+                    [imageViewCar setImage:[UIImage imageNamed:@"small_car.png"]];
+                    [imageViewCar setFrame:CGRectMake(startXPos, startPosY1, 32, 13)];
+                    [UIView animateWithDuration:RFID_CAR_ANIMATION_DURATION animations:^{
+                        startXPos = startXPos+5;
+                        [imageViewCar setFrame:CGRectMake(startXPos, startPosY1, 32, 13)];
+#ifdef Test
+                        NSLog(@"TEst");
+#else
+                        [self checkPointServiceRFID];
+#endif
+                        [self performSelector:@selector(followRFID) withObject:nil afterDelay:SELECTOR_DURATION];
+                    }];
+                }else{
+#ifdef Test
+                    checkPoint3_RFID = true;
+#else
+                    if(!checkPoint3_RFID){
+                        [self checkPointServiceRFID];
+                        [self performSelector:@selector(followRFID) withObject:nil afterDelay:SELECTOR_DURATION];
+                    }
+#endif
+                }
+                
+                if(checkPoint3_RFID){
+                    checkPoint1_RFID = FALSE;
+                    checkPoint2_RFID = FALSE;
+                    checkPoint3_RFID = FALSE;
+                    isTrackSuggestedPath = FALSE;
+                    //stop timer for 2nd point
+                    //move to final destination
+                    [imageViewCar setImage:[UIImage imageNamed:@"track_top_car.png"]];
+                    [imageViewCar setFrame:CGRectMake(startXPos, startPosY1, 11, 28)];
+                    [UIView animateWithDuration:RFID_CAR_ANIMATION_DURATION animations:^{
+                        startXPos = finalXPos;
+                        [imageViewCar setFrame:CGRectMake(finalXPos, startPosY1+24, 11, 28)];
+#ifdef Test
+                        
+#else
+                        [self performSelector:@selector(getParkingDataFromServer) withObject:nil afterDelay:5];
+#endif
+                         [self performSelector:@selector(removePathLayersFromSuperview) withObject:nil afterDelay:5];
+                        
+                        
+                    }];
+                    
+                }else{
+                    //call service for 3rd point
+#ifdef Test
+                    //checkPoint3_RFID = true;
+#else
+                    //                if (startXPos >= finalXPos) {
+                    //                NSLog(@"calling from sensor 2");
+                    //                    [self checkPointServiceRFID];
+                    //                }
+#endif
+                }
+                
+            }else{
+                //call checkpoint 2 service
+#ifdef Test
+                //checkPoint2_RFID = FALSE;
+#else
+                
+#endif
+                
+            }
+            
+        }else{
+            //call checkpoint 1 service
+#ifndef Test
+            [self checkPointServiceRFID];
+            [self performSelector:@selector(followRFID) withObject:nil afterDelay:SELECTOR_DURATION];
+#endif
+        }
+    }
+}
+
+
+
+#pragma mark- NEW UI
+
+
+-(void)drawSuggestedPathWithIdentifier:(NSString*)identifier {
+    
+    
+
+        
+        
+    
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Available Parking !!" message:[NSString stringWithFormat:@"Suggested parking space for you \"%@\"",identifier] preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        
+        UIAlertAction * done = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            UIView* containerView = [self containerBlockViewWithIdentifier:identifier];
+            //                    int index = [self indexFromIdentifer:emptySlotIdentifer];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                int index = [self indexFromIdentiferForNewLayout:identifier];
+                ParkingItemView* itemView = [self viewWithIdentifier:identifier index:index];
+                
+                if(self.cp){
+                    [self.cp removeLayer];
+                }
+                
+                int slots = containerView.tag == 1?16:containerView.tag==2?10:containerView.tag==3?18:20;
+                self.cp = [[CustomPathDrawer alloc] init];
+                [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots isSuggestedPath:YES];
+                
+                [self followRFID];
+            });
+        }];
+        
+        [alert addAction:done];
+        [alert addAction:cancel];
+        [self presentViewController:alert animated:YES completion:^{
+            
+        }];
+    
+    
+    /*
+    UIView* containerView = [self containerBlockViewWithIdentifier:identifier];
+    int index = [self indexFromIdentiferForNewLayout:identifier];
+    ParkingItemView* itemView = [self viewWithIdentifier:identifier index:index];
+    
+    if(self.cp){
+        [self.cp removeLayer];
+    }
+    
+    int slots = containerView.tag == 1?16:containerView.tag==2?10:containerView.tag==3?18:20;
+    self.cp = [[CustomPathDrawer alloc] init];
+    [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots isSuggestedPath:YES];
+    [self followRFID];*/
+}
+-(int)indexFromIdentiferForNewLayout:(NSString*)identifier{
+    
+    UIView* containerView = [self containerBlockViewWithIdentifier:identifier];
+//    int slots = containerView.tag == 1?16:containerView.tag==2?10:containerView.tag==3?18:20;
+    
+    int index = 0;
+    NSString* substring = @"";
+    if (identifier.length>=6) {
+        substring = [identifier substringFromIndex:4];
+        index = [substring intValue];
+    }
+    NSLog(@"Before .. Index of path for suggested parking slot =%d",index);
+    switch (containerView.tag) {
+        case 1:
+            //A
+            index = index > 8 ? index+2: index;
+            break;
+        case 2:
+            //A
+            break;
+        case 3:
+            //A
+            index = index > 2 ? index+2: index;
+            break;
+        case 4:
+            //A
+            break;
+            
+        default:
+            break;
+    }
+    NSLog(@"After .. Index of path for suggested parking slot =%d",index-1);
+    return index-1;
+}
+
+
+-(void)drawLayoutForParkingArea {
+    int blocksCount = 4;
+    for (int blockIndex=0; blockIndex<blocksCount; blockIndex++) {
+        NSString* baseIdentifier = [NSString stringWithFormat:@"%s%c",PARKING_BASESTR_GROUNDFLOOR,blockIndex+ASCII_VALUE_A];
+        
+        NSLog(@"%c %d",'A','a');
+        int itemwidth = 30;
+        int itemHeight = 35;
+        int xPos = 0;
+        int yPos = itemHeight;
+        
+        int itemsCountInAblock = blockIndex==0?18:blockIndex==1?10:blockIndex==2?20:20;
+        
+        for (int i=1; i<=itemsCountInAblock; i++) {
+            
+            ParkingItemView* piv = nil;
+            
+            NSString* cellId = [NSString stringWithFormat:@"%@%.02d",baseIdentifier,i];
+            
+            if (blockIndex == 0) {
+                //Block A construction
+                
+                if(i <= ((itemsCountInAblock/2)+1)){
+                    
+                    if (i<=8) {
+                        piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                        [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i]];
+                    }else if (i==9){
+                        piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:@"PGFAPH" delegate:self];
+                        piv.lblParkingNo.backgroundColor = COLOR_PHYSICALLY_HANDICAPPED_PARKING;
+                        piv.lblParkingNo.text = @"PH";
+                        piv.button.userInteractionEnabled =FALSE;
+                    }else if (i==10){
+                        piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:@"PGFARP" delegate:self];
+                        piv.lblParkingNo.backgroundColor = COLOR_RESERVERD_PARKING;
+                        piv.lblParkingNo.text = @"RP";
+                        piv.button.userInteractionEnabled =FALSE;
+                    }
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i]];
+//                    });
+                    
+                }else{
+                    piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i-2]];
+                    });
+                }
+            }else if (blockIndex == 1) {
+                //Block B construction
+                
+                if(i <= ((itemsCountInAblock/2)+1)){
+                    
+                    piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i]];
+                    });
+                    
+                }else{
+                    piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i]];
+                    });
+                }
+
+            }else if (blockIndex == 2) {
+                //Block B construction
+                
+                if(i <= ((itemsCountInAblock/2)+1)){
+                    
+                    if (i==1) {
+                        piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                        piv.lblParkingNo.backgroundColor = COLOR_RESERVERD_PARKING;
+                        piv.lblParkingNo.text = @"RP";
+                        piv.button.userInteractionEnabled =FALSE;
+                    }else if (i==2){
+                        piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                        piv.lblParkingNo.backgroundColor = COLOR_PHYSICALLY_HANDICAPPED_PARKING;
+                        piv.lblParkingNo.text = @"PH";
+                        piv.button.userInteractionEnabled =FALSE;
+                    }else if (i>2){
+                        piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                        [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i-2]];
+                    }
+                }else{
+                    piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i-2]];
+                    });
+                }
+                
+            }
+            
+            else{
+                if(i <= itemsCountInAblock/2){
+                    piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                }else{
+                    piv = [[ParkingItemView alloc] initWithFrame:CGRectMake(xPos, yPos, itemwidth, itemHeight) occupied:NO identifier:cellId delegate:self];
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [piv.lblParkingNo setText:[NSString stringWithFormat:@"%d",i]];
+                });
+            }
+            
+            
+            
+            NSLog(@"Identifer = %@",cellId);
+            
+            if (blockIndex == 0 || blockIndex == 1) {
+                if(i<=((itemsCountInAblock/2)+1)){
+                    xPos= xPos+itemwidth;
+                    if(i == ((itemsCountInAblock/2)+1)){
+                        xPos = itemwidth*2;
+                        yPos = yPos-itemHeight;
+                    }
+                    if (i<=8) {
+                        piv.tag = i;
+                    }else{
+                        piv.tag = -1;
+                    }
+                    
+                }else{
+                    xPos = xPos + itemwidth;
+                    if (blockIndex == 0) {
+                        piv.tag = i-2;
+                    }else{
+                        piv.tag = i;
+                    }
+                }
+            }else if(blockIndex == 2){
+                if(i<=itemsCountInAblock/2){
+                    xPos= xPos+itemwidth;
+                    if(i == itemsCountInAblock/2){
+                        xPos = 0;
+                        yPos = yPos-itemHeight;
+                    }
+                    
+                }else{
+                    xPos = xPos + itemwidth;
+                }
+                piv.tag = i-2;
+            }
+            
+            else{
+                if(i<=itemsCountInAblock/2){
+                    xPos= xPos+itemwidth;
+                    if(i == itemsCountInAblock/2){
+                        xPos = 0;
+                        yPos = yPos-itemHeight;
+                    }
+                }else{
+                    xPos = xPos + itemwidth;
+                }
+                piv.tag = i;
+            }
+            
+            
+            piv.layer.borderWidth = 0.5;
+            piv.layer.borderColor = [UIColor blackColor].CGColor;
+            //            NSLog(@"object =%@ %@ %@",piv.lblParkingNo,piv.imageView, piv.button);
+            
+            switch (blockIndex) {
+                case 0:
+                    [self.blockViewA addSubview:piv];
+                    break;
+                case 1:
+                    [self.blockViewB addSubview:piv];
+                    break;
+                case 2:
+                    [self.blockViewC addSubview:piv];
+                    break;
+                case 3:
+                    [self.blockViewD addSubview:piv];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+    }
+}
+
+
+
 #pragma mark- API Call
+
+-(void)validateIfCarIsPlacedOnRFIDSensor{
+
+    //An alert will be shown to user with available parking slot no., when a car is placed on RFID Sensor i.e. EntryGate
+    
+    NSURL *url = [NSURL URLWithString:BASE_URL_RFID_1];
+    
+    __block NSError* serverError = nil;
+    
+    [self sendRequestToServer:url completionHander:^(NSData *responseData, NSError *error) {
+        if (error) {
+            NSLog(@"url = %@ Error=%@",url,[error debugDescription]);
+        }else{
+            if (responseData != nil) {
+                
+                NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+                
+                if ([dict isKindOfClass:[NSDictionary class]]) {
+                    
+                    NSString* message = [dict valueForKey:@"message"];
+                    
+                    if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_1]) {
+                        
+                        [self getSuggestedParkingSlots];
+                        
+                        if (timerRFID.isValid) {
+                            [timerRFID invalidate];
+                            
+                        }
+                    }
+                }
+            }else{
+                NSLog(@"Data nil");
+            }
+        }
+    }];
+    
+//    if (responseData != nil) {
+//        NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+//        
+//        if ([dict isKindOfClass:[NSDictionary class]]) {
+//            
+//            NSString* message = [dict valueForKey:@"message"];
+//            
+//            if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_1]) {
+//                
+//                [self getSuggestedParkingSlots];
+//                
+//                if (timerRFID.isValid) {
+//                    [timerRFID invalidate];
+//                    
+//                }
+//            }
+//        }
+//    }else{
+//        NSLog(@"Data nil");
+//    }
+    //[self getSuggestedParkingSlots];
+}
+
+
+-(NSData*)sendRequestToServer:(NSURL*)url {
+    
+    //Method takes input as URL, and returns the response
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:30];
+    NSURLResponse *response;
+    NSError *error;
+    //send it synchronous
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if (error) {
+        return nil;
+    }
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+        
+        if (connectionError != nil) {
+            //call block
+        }else{
+            //passnil
+        }
+        
+    }];
+    
+    return responseData;
+}
+
+-(void)sendRequestToServer:(NSURL*)url completionHander:(void(^)(NSData* responseData,NSError* error))completionHander{
+ 
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:30];
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+        
+        if (connectionError == nil) {
+            //call block
+            completionHander(data,nil);
+        }else{
+            //passnil
+            NSLog(@"Error =%@",[connectionError debugDescription]);
+            completionHander(nil,connectionError);
+        }
+    }];
+}
+
+-(void)getSuggestedParkingSlots{
+    //api/sort/ground/A1
+    [ProgressHUD show:@"Loading please wait..."];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@",BASE_URL,@"api/sort/ground/B2?"] ];
+    
+    [self sendRequestToServer:url completionHander:^(NSData *responseData, NSError *error){
+        if(error)
+        {
+            //log response
+            [self showAlert:error];
+        }
+        else{
+            
+            if (responseData != nil) {
+                NSError* serverError = nil;
+                NSArray* arrRecords = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+                
+                if(!serverError){
+                    NSLog(@"Response = %@",arrRecords);
+                    if ([arrRecords count]>0) {
+                        
+                        
+                        NSDictionary* response = [arrRecords objectAtIndex:0];
+                        NSString* emptySlotIdentifer = [response valueForKey:@"_id"];
+                        
+                        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Available Parking !!" message:[NSString stringWithFormat:@"Suggested parking space for you \"%@\"",emptySlotIdentifer] preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            
+                        }];
+                        
+                        UIAlertAction * done = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                            
+                            UIView* containerView = [self containerBlockViewWithIdentifier:emptySlotIdentifer];
+                            //                    int index = [self indexFromIdentifer:emptySlotIdentifer];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                int index = [self indexFromIdentiferForNewLayout:emptySlotIdentifer];
+                                ParkingItemView* itemView = [self viewWithIdentifier:emptySlotIdentifer index:index];
+                                
+                                if(self.cp){
+                                    [self.cp removeLayer];
+                                }
+                                
+                                int slots = containerView.tag == 1?16:containerView.tag==2?10:containerView.tag==3?18:20;
+                                self.cp = [[CustomPathDrawer alloc] init];
+                                [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots isSuggestedPath:YES];
+                                
+                                [self followRFID];
+                            });
+                        }];
+                        
+                        [alert addAction:done];
+                        [alert addAction:cancel];
+                        [self presentViewController:alert animated:YES completion:^{
+                            
+                        }];
+                    }
+                    
+                    [self fillSubviewWithInfo:nil];
+                }
+                else{
+                    NSLog(@"Error Desc: %@",[error debugDescription]);
+                    [self showAlert:error];
+                }
+            }else{
+                NSLog(@"GetParkingSlot response data nil");
+            }
+        }
+    }];
+    
+    
+//    if(error)
+//    {
+//        //log response
+//        [self showAlert:error];
+//    }
+//    else{
+//        
+//        if (responseData != nil) {
+//            NSError* serverError = nil;
+//            NSArray* arrRecords = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+//            
+//            if(!serverError){
+//                NSLog(@"Response = %@",arrRecords);
+//                if ([arrRecords count]>0) {
+//                    
+//                    
+//                    NSDictionary* response = [arrRecords objectAtIndex:0];
+//                    NSString* emptySlotIdentifer = [response valueForKey:@"_id"];
+//                    
+//                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Available Parking !!" message:[NSString stringWithFormat:@"Suggested parking space for you \"%@\"",emptySlotIdentifer] preferredStyle:UIAlertControllerStyleAlert];
+//                    
+//                    UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                        
+//                    }];
+//                    
+//                    UIAlertAction * done = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                        
+//                        UIView* containerView = [self containerBlockViewWithIdentifier:emptySlotIdentifer];
+//                        //                    int index = [self indexFromIdentifer:emptySlotIdentifer];
+//                        int index = [self indexFromIdentiferForNewLayout:emptySlotIdentifer];
+//                        ParkingItemView* itemView = [self viewWithIdentifier:emptySlotIdentifer index:index];
+//                        
+//                        if(self.cp){
+//                            [self.cp removeLayer];
+//                        }
+//                        
+//                        int slots = containerView.tag == 1?16:containerView.tag==2?10:containerView.tag==3?18:20;
+//                        self.cp = [[CustomPathDrawer alloc] init];
+//                        [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots isSuggestedPath:YES];
+//                        
+//                        //                  [self moveObjectOnBezierPath:containerView];
+//                        [self followRFID];
+//                        
+//                    }];
+//                    
+//                    [alert addAction:done];
+//                    [alert addAction:cancel];
+//                    [self presentViewController:alert animated:YES completion:^{
+//                        
+//                    }];
+//                }
+//                
+//                [self fillSubviewWithInfo:nil];
+//            }
+//            else{
+//                NSLog(@"Error Desc: %@",[error debugDescription]);
+//                [self showAlert:error];
+//            }
+//        }else{
+//            NSLog(@"GetParkingSlot response data nil");
+//        }
+//    }
+    [ProgressHUD dismiss];
+    
+}
+
+-(void)getParkingDataFromServer{
+    
+    [ProgressHUD show:@"Loading please wait..."];
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@",BASE_URL,@"api/sensors"]];
+    
+    [self sendRequestToServer:url completionHander:^(NSData *responseData, NSError *error) {
+        
+        if(error)
+        {
+            //log response
+            [self showAlert:error];
+        }
+        else{
+            
+            if(responseData != nil){
+                NSError* serverError = nil;
+                NSArray* arrRecords = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+                
+                if(!serverError){
+                    NSLog(@"Response = %@",arrRecords);
+                    self.arrLocations = [NSMutableArray arrayWithArray:[ParkingParser parseLocationData:arrRecords]];
+                    
+                    [self fillSubviewWithInfo:nil];
+                    
+                }
+                else{
+                    NSLog(@"Error Desc: %@",[error debugDescription]);
+                    [self showAlert:error];
+                }
+            }else{
+                NSMutableDictionary* details = [NSMutableDictionary dictionary];
+                [details setValue:@"Trouble in connecting with server." forKey:NSLocalizedDescriptionKey];
+                // populate the error object with the details
+                NSError *error = [NSError errorWithDomain:@"Error" code:200 userInfo:details];
+                [self showAlert:error];
+            }
+        }
+    }];
+    
+//    NSData *responseData = [self sendRequestToServer:url];
+//    if(error)
+//    {
+//        //log response
+//        [self showAlert:error];
+//    }
+//    else{
+//        
+//        if(responseData != nil){
+//            NSError* serverError = nil;
+//            NSArray* arrRecords = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+//            
+//            if(!serverError){
+//                NSLog(@"Response = %@",arrRecords);
+//                self.arrLocations = [NSMutableArray arrayWithArray:[ParkingParser parseLocationData:arrRecords]];
+//                
+//                [self fillSubviewWithInfo:nil];
+//                
+//            }
+//            else{
+//                NSLog(@"Error Desc: %@",[error debugDescription]);
+//                [self showAlert:error];
+//            }
+//        }else{
+//            NSMutableDictionary* details = [NSMutableDictionary dictionary];
+//            [details setValue:@"Trouble in connecting with server." forKey:NSLocalizedDescriptionKey];
+//            // populate the error object with the details
+//            NSError *error = [NSError errorWithDomain:@"Error" code:200 userInfo:details];
+//            [self showAlert:error];
+//        }
+//
+//    }
+    [ProgressHUD dismiss];
+}
+
+#pragma mark -
+-(void)checkPointServiceRFID {
+    
+    //Initiate a request to server asking for RFID sensor's data for different checkpoints one by one
+    
+    NSString * baseURL = @"";
+    if (!checkPoint1_RFID) {
+        baseURL = BASE_URL_RFID_1;
+    }else if(!checkPoint2_RFID){
+        baseURL = BASE_URL_RFID_2;
+    }else if (!checkPoint3_RFID){
+        baseURL = BASE_URL_RFID_3;
+    }
+    NSLog(@"Base URL RFID=%@",baseURL);
+    NSURL *url = [NSURL URLWithString:baseURL];
+//    NSData *responseData = [self sendRequestToServer:url];
+//    NSError* serverError = nil;
+//    if (responseData != nil) {
+//        NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+//        
+//        if ([dict isKindOfClass:[NSDictionary class]]) {
+//            
+//            NSString* message = [dict valueForKey:@"message"];
+//            NSLog(@"Response message =%@",message);
+//            if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_1]) {
+//                checkPoint1_RFID = true;
+//                [self performSelector:@selector(followRFID) withObject:nil afterDelay:0.1];
+//            }
+//            else if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_2]) {
+//                checkPoint2_RFID = true;
+//                [self performSelector:@selector(followRFID) withObject:nil afterDelay:0.1];
+//            }
+//            else if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_3]) {
+//                checkPoint3_RFID = true;
+//            }
+//            
+//        }
+//    }else{
+//        NSLog(@"Data nil");
+//    }
+    
+    [self sendRequestToServer:url completionHander:^(NSData *responseData, NSError *error) {
+        
+        if (error) {
+            
+        }else{
+            if (responseData != nil) {
+                NSError* serverError = nil;
+                NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
+                
+                if ([dict isKindOfClass:[NSDictionary class]]) {
+                    
+                    NSString* message = [dict valueForKey:@"message"];
+                    NSLog(@"Response message =%@",message);
+                    if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_1]) {
+                        checkPoint1_RFID = true;
+                        [self performSelector:@selector(followRFID) withObject:nil afterDelay:0.1];
+                    }
+                    else if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_2]) {
+                        checkPoint2_RFID = true;
+                        [self performSelector:@selector(followRFID) withObject:nil afterDelay:0.1];
+                    }
+                    else if (message != nil && [message isEqualToString:MESSAGE_RFID_CHECKPOINT_3]) {
+                        checkPoint3_RFID = true;
+                        NSLog(@"RFID Sensor 3 message = %@",message);
+                    }
+                    
+                }
+            }else{
+                NSLog(@"RFID responseData is NIL...");
+            }
+        }
+    }];
+    
+}
+
+#pragma mark- Alert
 -(void)showAlert:(NSError*)error {
     
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:[error debugDescription] preferredStyle:UIAlertControllerStyleAlert];
@@ -269,117 +1117,59 @@ UIView * prevView;
     }];
 }
 
--(NSData*)sendRequestToServer:(NSURL*)url {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setTimeoutInterval:30];
-    NSURLResponse *response;
-    NSError *error;
-    //send it synchronous
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if (error) {
-        return nil;
-    }
-    return responseData;
-}
 
--(void)getParkingSlots{
-    //'http://lap-tz-0X63284A:3000/api/sort/ground/A1
-    [ProgressHUD show:@"Loading please wait..."];
-    NSError *error;
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@",BASE_URL,@"api/sort/ground/A1?"] ];
-    NSData *responseData = [self sendRequestToServer:url];
-    //    NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    // check for an error. If there is a network error, you should handle it here.
-    if(error)
-    {
-        //log response
-        [self showAlert:error];
-    }
-    else{
-        NSError* serverError = nil;
-        NSArray* arrRecords = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
-        
-        if(!serverError){
-            NSLog(@"Response = %@",arrRecords);
-            if ([arrRecords count]>0) {
-                
-                
-                NSDictionary* response = [arrRecords objectAtIndex:0];
-                NSString* emptySlotIdentifer = [response valueForKey:@"_id"];
-                
-                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Parking Info" message:[NSString stringWithFormat:@"Suggested parking space for you %@",emptySlotIdentifer] preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction * done = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    
-                    UIView* containerView = [self containerBlockViewWithIdentifier:emptySlotIdentifer];
-                    int index = [self indexFromIdentifer:emptySlotIdentifer];
-                    ParkingItemView* itemView = [self viewWithIdentifier:emptySlotIdentifer index:index];
-                    
-                    if(self.cp){
-                        [self.cp removeLayer];
-                    }
-                    
-                    int slots = containerView.tag == 2?10:20;
-                    self.cp = [[CustomPathDrawer alloc] init];
-                    [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots];
-                    
-                }];
-                [alert addAction:done];
-                [self presentViewController:alert animated:YES completion:^{
-                    
-                }];
-                
-                
-                
-                
-                
-            }
-            
-            [self fillSubviewWithInfo:nil];
-        }
-        else{
-            NSLog(@"Error Desc: %@",[error debugDescription]);
-            [self showAlert:error];
-        }
-        
-    }
-    [ProgressHUD dismiss];
-    
-}
+#pragma mark- Timer
 
--(void)makeAPIRequest{
-    [ProgressHUD show:@"Loading please wait..."];
-    NSError *error = nil;
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@",BASE_URL,@"api/sensors"]];
-    NSData *responseData = [self sendRequestToServer:url];
-//    NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    // check for an error. If there is a network error, you should handle it here.
-    if(error)
-    {
-        //log response
-        [self showAlert:error];
-    }
-    else{
-        NSError* serverError = nil;
-        NSArray* arrRecords = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&serverError];
-        
-        if(!serverError){
-            NSLog(@"Response = %@",arrRecords);
-            self.arrLocations = [NSMutableArray arrayWithArray:[ParkingParser parseLocationData:arrRecords]];
-            
-            [self fillSubviewWithInfo:nil];
-            [self getParkingSlots];
-        }
-        else{
-            NSLog(@"Error Desc: %@",[error debugDescription]);
-            [self showAlert:error];
-        }
-
-    }
-    [ProgressHUD dismiss];
-}
 
 
 #pragma mark- Helpers
+
+-(NSString*)getBlockTitle:(int)index{
+    NSString* blockTitle = @"";
+    switch (index) {
+        case 0:
+            blockTitle = @"Block A";
+            break;
+        case 1:
+            blockTitle = @"Block B";
+            break;
+        case 2:
+            blockTitle = @"Block C";
+            break;
+        case 3:
+            blockTitle = @"Block D";
+            break;
+            
+        default:
+            blockTitle = [NSString stringWithFormat:@"Block %d",index];
+            break;
+    }
+    return blockTitle;
+}
+
+
+-(void)moveObjectOnBezierPath:(UIView*)containerView{
+    
+    UIImage *movingImage = [UIImage imageNamed:@"small_car.png"];
+    movingLayer = [CALayer layer];
+    movingLayer.contents = (id)movingImage.CGImage;
+    movingLayer.anchorPoint = CGPointZero;
+    
+    movingLayer.frame = CGRectMake(0.0f, 0.0f, movingImage.size.width, movingImage.size.height);
+    [self.parkingScrollview.layer addSublayer:movingLayer];
+    
+    CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    pathAnimation.delegate = self;
+    pathAnimation.duration = containerView.tag == 1?8.0:containerView.tag == 2?12.0:containerView.tag == 3?15.0:20.0;
+    pathAnimation.path = [self.cp getPath].CGPath;
+    pathAnimation.rotationMode = kCAAnimationRotateAuto;
+    pathAnimation.calculationMode = kCAAnimationLinear;
+    
+    pathAnimation.fillMode = kCAFillModeForwards;
+    pathAnimation.removedOnCompletion = false;
+    
+    [movingLayer addAnimation:pathAnimation forKey:@"movingAnimation"];
+}
 
 -(int)getEmptyParkingSlots:(NSArray*)dataArray {
     
@@ -426,6 +1216,7 @@ UIView * prevView;
 }
 
 -(int)indexFromIdentifer:(NSString*)identifier{
+    
     int index = 0;
     if (identifier.length>=6) {
         NSString* substring = [identifier substringFromIndex:4];
@@ -433,6 +1224,8 @@ UIView * prevView;
     }
     return index-1;
 }
+
+
 
 -(void)fillSubviewWithInfo:(NSDictionary*)dic {
     
@@ -478,19 +1271,31 @@ UIView * prevView;
         NSArray* dataArray = [arrBlocks objectAtIndex:block];
         
         for (int index = 0; index<dataArray.count; index++) {
+            
             Parking* p = [dataArray objectAtIndex:index];
             ParkingItemView* view = [self viewWithIdentifier:p.cellId index:index];
-            if (p.occupied ) {
+            
+            if (block == 0 && index >8) {
+                view = [self viewWithIdentifier:p.cellId index:index+2];
+            }
+            else if (block == 2 ){
+                view = [self viewWithIdentifier:p.cellId index:index+2];
+            }
+            
+            
+            if (p.occupied && view.tag >=
+                1) {
                 NSLog(@"occupied tag =%ld",view.tag);
                 if(view.tag >=1 && view.tag <= [dataArray count]/2){
                     [view.imageView setImage:[UIImage imageNamed:@"car_bottom.png"]];
-                    view.backgroundColor = [UIColor colorWithRed:255/255.0 green:0 blue:0 alpha:0.5];
                 }else{
                     [view.imageView setImage:[UIImage imageNamed:@"car_top.png"]];
                 }
+                view.button.userInteractionEnabled = false;
                 view.backgroundColor = [UIColor colorWithRed:255/255.0 green:0 blue:0 alpha:0.5];
             }else{
                 NSLog(@"NOt occupied tag =%ld",view.tag);
+                view.button.userInteractionEnabled = true;
                 [view.imageView setImage:nil];
                 view.backgroundColor = [UIColor colorWithRed:102/255.0 green:255/255.0 blue:102/255.0 alpha:0.5];
             }
@@ -498,37 +1303,23 @@ UIView * prevView;
     }
     
     [ProgressHUD dismiss];
-    
-    
-//    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-//    shapeLayer.path = [self createPath].CGPath;
-//    shapeLayer.fillColor = nil;
-//    shapeLayer.opacity = 1.0;
-//    shapeLayer.lineWidth = 2.0;
-//    shapeLayer.strokeColor = [UIColor redColor].CGColor;
-//    [self.parkingScrollview.layer addSublayer:shapeLayer];
-    
-//    CustomPathDrawer* cp = [[CustomPathDrawer alloc] init];
-//    
-//    ParkingItemView* view = [self viewWithIdentifier:@"PGFA05" index:5];
-//    CAShapeLayer* shapeLayer = [cp drawPathForItem:view];
-//    [self.parkingScrollview.layer addSublayer:shapeLayer];
-
-    
+}
+#pragma mark-
+-(void)removePathLayersFromSuperview{
+    if (self.cp) {
+        [self.cp removeLayer];
+    }
+    if (movingLayer) {
+        [movingLayer removeFromSuperlayer];
+    }
+    if (imageViewCar && !imageViewCar.isHidden) {
+        [imageViewCar setHidden:true];
+    }
 }
 
-- (UIBezierPath*)createPath
-{
-    UIBezierPath* path = [[UIBezierPath alloc]init];
-    [path moveToPoint:CGPointMake(10, 300)];
-    [path addLineToPoint:CGPointMake(600.0,300.0)];
-    [path addLineToPoint:CGPointMake(600.0,280.0)];
-//    [path addLineToPoint:CGPointMake(200.0, 500)];
-//    [path addLineToPoint:CGPointMake(200.0, 500.0)];
-    //[path closePath];
-    //[path stroke];
-    [[UIColor blueColor] set];
-    return path;
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+    [self performSelector:@selector(removePathLayersFromSuperview) withObject:nil afterDelay:0.5];
+    [self.view setUserInteractionEnabled:true];
 }
 
 #pragma mark- ParkingItemViewDelegate 
@@ -538,28 +1329,12 @@ UIView * prevView;
         [self.cp removeLayer];
     }
     
-    int slots = containerView.tag == 2?10:20;
+    int slots = containerView.tag == 1?16:containerView.tag==2?10:containerView.tag==3?18:20;
     self.cp = [[CustomPathDrawer alloc] init];
-    [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots];
+    [self.cp drawPathOnLayer:self.parkingScrollview.layer FromView:containerView toItem:itemView totalSlots:slots isSuggestedPath:NO];
+    [self moveObjectOnBezierPath:containerView];
     
-    UIImage *movingImage = [UIImage imageNamed:@"small_car.png"];
-    CALayer *movingLayer = [CALayer layer];
-    movingLayer.contents = (id)movingImage.CGImage;
-    movingLayer.anchorPoint = CGPointZero;
     
-    movingLayer.frame = CGRectMake(0.0f, 0.0f, movingImage.size.width, movingImage.size.height);
-    [self.parkingScrollview.layer addSublayer:movingLayer];
-    
-    CAKeyframeAnimation *pathAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-    pathAnimation.duration = 8.0f;
-    pathAnimation.path = [self.cp getPath].CGPath;
-    pathAnimation.rotationMode = kCAAnimationRotateAuto;
-    pathAnimation.calculationMode = kCAAnimationLinear;
-    
-    pathAnimation.fillMode = kCAFillModeForwards;
-    pathAnimation.removedOnCompletion = false;
-    
-    [movingLayer addAnimation:pathAnimation forKey:@"movingAnimation"];
 }
 
 

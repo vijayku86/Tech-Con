@@ -26,6 +26,14 @@
     UIBezierPath* path = [self getPath];
     [path moveToPoint:SP_START_POINT];
     [path addLineToPoint:SP_CHECK_POINT_1];
+    
+    //to save suggested path
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_START_POINT]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_1]];
+    }
+    
+    
     return path;
 }
 
@@ -36,6 +44,14 @@
     CGPoint point1 = CGPointMake(itemView.center.x+HorizontalSpacing+ leftMarginFromContainer + (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_1.y-VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
     
 }
@@ -47,12 +63,20 @@
     CGPoint point1 = CGPointMake(itemView.center.x+HorizontalSpacing+ leftMarginFromContainer + (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_2.y+VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_2]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
     
 }
 
 -(UIBezierPath*)moveToItemAtFirstHalfOfBlockB:(ParkingItemView*)itemView{
-    int splMargin = 150;
+    int splMargin = 120;
     UIBezierPath* path = [self startingPath];
     [path addLineToPoint:SP_CHECK_POINT_2];
     [path addLineToPoint:SP_CHECK_POINT_3];
@@ -60,11 +84,20 @@
     CGPoint point1 = CGPointMake(itemView.center.x+HorizontalSpacing+ leftMarginFromContainer + splMargin+  (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_3.y-VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_2]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_3]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
 }
 
 -(UIBezierPath*)moveToItemAtSecondHalfOfBlockB:(ParkingItemView*)itemView{
-    int splMargin = 150;
+    int splMargin = 120;
     UIBezierPath* path = [self startingPath];
     [path addLineToPoint:SP_CHECK_POINT_2];
     [path addLineToPoint:SP_CHECK_POINT_3];
@@ -73,6 +106,16 @@
     CGPoint point1 = CGPointMake(itemView.center.x+HorizontalSpacing+ leftMarginFromContainer + splMargin+  (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_4.y+VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_2]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_3]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_4]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
     
 }
@@ -85,6 +128,14 @@
     CGPoint point1 = CGPointMake(SP_CHECK_POINT_5.x+itemView.center.x+HorizontalSpacing +  (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_5.y-VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_5]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
 }
 
@@ -96,6 +147,15 @@
     CGPoint point1 = CGPointMake(SP_CHECK_POINT_6.x+itemView.center.x+HorizontalSpacing+  (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_6.y+VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_2]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_6]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
     
 }
@@ -110,6 +170,16 @@
     CGPoint point1 = CGPointMake(SP_CHECK_POINT_7.x+itemView.center.x+HorizontalSpacing +  (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_7.y-VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_2]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_3]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_7]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
 }
 
@@ -123,6 +193,18 @@
     CGPoint point1 = CGPointMake(SP_CHECK_POINT_8.x+itemView.center.x+HorizontalSpacing+  (CGRectGetWidth(itemView.frame)/2), SP_CHECK_POINT_8.y+VerticalSpacing);
     [path addLineToPoint:point];
     [path addLineToPoint:point1];
+    
+    
+    //to save suggested path points
+    if (isSuggestedPath) {
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_2]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_3]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_4]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:SP_CHECK_POINT_8]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point]];
+        [self.arrSuggestedPathPoints addObject:[NSValue valueWithCGPoint:point1]];
+    }
+    
     return path;
     
 }
@@ -148,7 +230,12 @@
     return shapeLayer;
 }
 
--(void)drawPathOnLayer:(CALayer*)superviewLayer FromView:(UIView*)containerView toItem:(ParkingItemView*)item totalSlots:(int)slots {
+-(void)drawPathOnLayer:(CALayer*)superviewLayer FromView:(UIView*)containerView toItem:(ParkingItemView*)item totalSlots:(int)slots isSuggestedPath:(BOOL)suggestedPath{
+    
+    if (suggestedPath) {
+        isSuggestedPath = suggestedPath;
+        self.arrSuggestedPathPoints = [[NSMutableArray alloc] init];
+    }
     int tag = (int)containerView.tag;
     switch (tag) {
         case 1:
@@ -169,7 +256,7 @@
             break;
         case 2:
             //blockB
-            if (item.tag <= slots/2 ) {
+            if (item.tag <= slots/2+1 ) {
                 //FirstHalf
                 UIBezierPath* path = [self moveToItemAtFirstHalfOfBlockB:item];
                 CAShapeLayer* layer = [self createShapeLayer];
@@ -185,7 +272,7 @@
             break;
         case 3:
             //blockC
-            if (item.tag <= slots/2 ) {
+            if (item.tag <= slots/2-1 ) {
                 //FirstHalf
                 UIBezierPath* path = [self moveToItemAtFirstHalfOfBlockC:item];
                 CAShapeLayer* layer = [self createShapeLayer];
