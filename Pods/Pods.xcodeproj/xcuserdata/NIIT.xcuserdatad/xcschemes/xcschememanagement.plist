@@ -4,7 +4,17 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>LTMorphingLabel.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MFSideMenu.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>PNChart.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -19,20 +29,40 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>UICountingLabel.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0FB3864CF47A4C4BD1587783785938C3</key>
+		<key>016D982990393D4CF14C8AE7998AEC65</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4FFC07CAA6416BF7EB1CD8169E6EBA74</key>
+		<key>3C900E8E2449EBBCC12128A9BDA69E7F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6FCA609D0CA78E03BEF54D0C0BE0F25</key>
+		<key>6C18C789438292FED01EB702705FC9AA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>87C61E49A0471BB1F53FE59DAB5F9502</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9A923F554FE24682810ED75DC853CD39</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BE9A3F938BFCF671A2AB4C0638137971</key>
 		<dict>
 			<key>primary</key>
 			<true/>
